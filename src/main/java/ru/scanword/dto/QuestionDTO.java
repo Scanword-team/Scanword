@@ -9,6 +9,5 @@ public class QuestionDTO {
     private Long id;
     private String answer;
     private String question;
-    private Scanword scanword;
 
 }
