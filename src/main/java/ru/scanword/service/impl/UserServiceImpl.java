@@ -4,16 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.scanword.domain.AudioQuestion;
 import ru.scanword.domain.User;
-import ru.scanword.dto.AudioQuestionDTO;
+import ru.scanword.domain.enums.Role;
+import ru.scanword.domain.enums.Status;
 import ru.scanword.dto.UserDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
-import ru.scanword.mapper.AudioQuestionMapper;
 import ru.scanword.mapper.UserMapper;
-import ru.scanword.repository.AudioQuestionRepository;
 import ru.scanword.repository.UserRepository;
-import ru.scanword.service.AudioQuestionService;
 import ru.scanword.service.UserService;
 
 import java.util.List;
@@ -70,6 +67,15 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
         return (userRepository.findById(id).isPresent());
+    }
+
+    @Override
+    @Transactional
+    public UserDTO createUser(UserDTO userDTO) {
+        userDTO.setRole(Role.USER);
+        userDTO.setStatus(Status.ACTIVE);
+        userRepository.save(toEntity(userDTO));
+        return userDTO;
     }
 
     private User toEntity(UserDTO userDTO){
