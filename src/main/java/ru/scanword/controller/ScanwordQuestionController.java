@@ -27,6 +27,12 @@ public class ScanwordQuestionController {
         return null;
     }
 
+    @GetMapping("getAllByScanwordId/{scanword_id}")
+    public List<ScanwordQuestionDTO> getAllByScanwordId(@PathVariable Long scanword_id) {
+        return scanwordQuestionService.getAllByScanwordId(scanword_id);
+    }
+
+
     @PostMapping("/create")
     ScanwordQuestionDTO create(@RequestBody ScanwordQuestionDTO scanwordQuestionDTO) {
         return scanwordQuestionService.create(scanwordQuestionDTO);

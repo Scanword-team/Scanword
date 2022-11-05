@@ -12,6 +12,7 @@ public class ScanwordQuestionDTO {
     private Scanword scanword;
     private Question question;
     private Boolean direction;
+    private int number;
     private int x;
     private int y;
 }

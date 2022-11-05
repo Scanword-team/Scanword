@@ -41,6 +41,11 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
         return toDTO(scanwordQuestionRepository.findByScanwordIdAndQuestionId(scanword_id, question_id).get());
     }
 
+    @PreAuthorize("hasAuthority('read')")
+    public List<ScanwordQuestionDTO> getAllByScanwordId(Long scanword_id) {
+        return allToDTO(scanwordQuestionRepository.findAllByScanwordId(scanword_id));
+    }
+
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('write')")

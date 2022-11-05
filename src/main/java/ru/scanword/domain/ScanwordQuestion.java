@@ -26,6 +26,9 @@ public class ScanwordQuestion {
     @Column(name = "direction")
     private Boolean direction;
 
+    @Column(name = "number")
+    private int number;
+
     @Column(name = "x")
     private int x;
 
