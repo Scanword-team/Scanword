@@ -15,7 +15,7 @@ public interface QuestionMapper {
 
     Question toEntity(QuestionDTO questionDTO);
 
-    @Mapping(target = "id", ignore = true)
+    //@Mapping(target = "id", ignore = true)
     QuestionDTO toDTO(Question question);
     List<Question> allToEntity(List<QuestionDTO> questionDTOList);
     List<QuestionDTO> allToDTO(List<Question> questionList);

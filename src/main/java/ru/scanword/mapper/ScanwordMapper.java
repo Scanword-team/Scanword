@@ -15,7 +15,7 @@ public interface ScanwordMapper {
 
     Scanword toEntity(ScanwordDTO scanwordDTO);
 
-    @Mapping(target = "id", ignore = true)
+    //@Mapping(target = "id", ignore = true)
     ScanwordDTO toDTO(Scanword scanword);
     List<Scanword> allToEntity(List<ScanwordDTO> scanwordDTOList);
     List<ScanwordDTO> allToDTO(List<Scanword> scanwordList);

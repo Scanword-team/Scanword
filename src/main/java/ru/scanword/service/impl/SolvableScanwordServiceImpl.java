@@ -2,13 +2,20 @@ package ru.scanword.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.scanword.domain.Question;
 import ru.scanword.domain.SolvableScanword;
+import ru.scanword.domain.User;
+import ru.scanword.dto.QuestionDTO;
 import ru.scanword.dto.SolvableScanwordDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
+import ru.scanword.mapper.QuestionMapper;
 import ru.scanword.mapper.SolvableScanwordMapper;
 import ru.scanword.repository.SolvableScanwordRepository;
+import ru.scanword.repository.UserRepository;
 import ru.scanword.service.SolvableScawordService;
 
 import java.util.List;
@@ -18,8 +25,8 @@ import java.util.List;
 public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
     private final SolvableScanwordRepository solvableScanwordRepository;
+    private final UserRepository userRepository;
 
-    //private final SolvableScanwordServiceImpl solvableScanwordService;
 
     @Override
     @Transactional(readOnly = true)
@@ -65,6 +72,19 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
         }
         solvableScanwordRepository.deleteById(id);
         return (solvableScanwordRepository.findById(id).isPresent());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('read')")
+    public List<QuestionDTO> getAllByScanwordId(Long scanwordId) {
+        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByName(securityUser.getUsername()).get();
+
+        if (!solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).isPresent()) {
+            throw new ResourceNotFoundException("No link","");
+        }
+        return QuestionMapper.QUESTION_MAPPER.allToDTO(solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).get().getSolvedQuestions());
     }
 
     private SolvableScanword toEntity(SolvableScanwordDTO solvableScanwordDTO){

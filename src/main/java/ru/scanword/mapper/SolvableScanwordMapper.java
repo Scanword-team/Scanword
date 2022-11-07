@@ -15,7 +15,7 @@ public interface SolvableScanwordMapper {
 
     SolvableScanword toEntity(SolvableScanwordDTO solvableScanwordDTO);
 
-    @Mapping(target = "id", ignore = true)
+    //@Mapping(target = "id", ignore = true)
     SolvableScanwordDTO toDTO(SolvableScanword solvableScanword);
     List<SolvableScanword> allToEntity(List<SolvableScanwordDTO> solvableScanwordDTOList);
     List<SolvableScanwordDTO> allToDTO(List<SolvableScanword> solvableScanwordList);

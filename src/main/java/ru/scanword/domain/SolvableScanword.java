@@ -3,6 +3,7 @@ package ru.scanword.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -31,6 +32,6 @@ public class SolvableScanword {
             name = "solvable_scanword_question",
             joinColumns = @JoinColumn(name = "solvable_scanword_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
-    Set<Question> solvedQuestions;
+    List<Question> solvedQuestions;
 
 }

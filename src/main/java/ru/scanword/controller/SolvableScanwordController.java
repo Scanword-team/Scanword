@@ -2,6 +2,7 @@ package ru.scanword.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.scanword.dto.QuestionDTO;
 import ru.scanword.dto.SolvableScanwordDTO;
 import ru.scanword.service.impl.SolvableScanwordServiceImpl;
 
@@ -40,5 +41,10 @@ public class SolvableScanwordController {
     @DeleteMapping("/deleteById/{id}")
     public boolean deleteById(@PathVariable Long id){
         return solvableScanwordService.deleteById(id);
+    }
+
+    @GetMapping("getAllByScanwordId/{scanwordId}")
+    public List<QuestionDTO> getAll(@PathVariable Long scanwordId) {
+        return solvableScanwordService.getAllByScanwordId(scanwordId);
     }
 }
