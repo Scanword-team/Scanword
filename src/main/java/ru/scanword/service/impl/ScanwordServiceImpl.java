@@ -2,13 +2,20 @@ package ru.scanword.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.Scanword;
+import ru.scanword.domain.User;
 import ru.scanword.dto.ScanwordDTO;
+import ru.scanword.dto.StatsDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.ScanwordMapper;
+import ru.scanword.repository.ScanwordQuestionRepository;
 import ru.scanword.repository.ScanwordRepository;
+import ru.scanword.repository.SolvableScanwordRepository;
+import ru.scanword.repository.UserRepository;
 import ru.scanword.service.ScanwordService;
 
 import java.util.List;
@@ -17,6 +24,9 @@ import java.util.List;
 public class ScanwordServiceImpl  implements ScanwordService {
 
     private final ScanwordRepository scanwordRepository;
+    private final ScanwordQuestionRepository scanwordQuestionRepository;
+    private final UserRepository userRepository;
+    private final SolvableScanwordRepository solvableScanwordRepository;
 
     //private final ScanwordServiceImpl scanwordService;
 
@@ -64,6 +74,21 @@ public class ScanwordServiceImpl  implements ScanwordService {
         }
         scanwordRepository.deleteById(id);
         return (scanwordRepository.findById(id).isPresent());
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('read')")
+    public StatsDTO getStats(Long id) {
+        int total = scanwordQuestionRepository.findAllByScanwordId(id).size();
+        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByName(securityUser.getUsername()).get();
+
+        if (!solvableScanwordRepository.findByScanwordIdAndOwner(id, user).isPresent()) {
+            return new StatsDTO(0,total);
+        }
+        int resolved = solvableScanwordRepository.findByScanwordIdAndOwner(id, user).get().getSolvedQuestions().size();
+        return new StatsDTO(resolved, total);
     }
 
     private Scanword toEntity(ScanwordDTO connectionDTO){

@@ -47,4 +47,9 @@ public class SolvableScanwordController {
     public List<QuestionDTO> getAll(@PathVariable Long scanwordId) {
         return solvableScanwordService.getAllByScanwordId(scanwordId);
     }
+
+    @PostMapping("/addResolvedQuestion/{scanwordId}")
+    public QuestionDTO addResolvedQuestion(@PathVariable Long scanwordId, @RequestBody QuestionDTO questionDTO) {
+        return solvableScanwordService.addResolvedQuestion(scanwordId, questionDTO);
+    }
 }

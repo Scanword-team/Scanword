@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.Question;
+import ru.scanword.domain.Scanword;
 import ru.scanword.domain.SolvableScanword;
 import ru.scanword.domain.User;
 import ru.scanword.dto.QuestionDTO;
@@ -14,10 +15,12 @@ import ru.scanword.dto.SolvableScanwordDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.QuestionMapper;
 import ru.scanword.mapper.SolvableScanwordMapper;
+import ru.scanword.repository.ScanwordRepository;
 import ru.scanword.repository.SolvableScanwordRepository;
 import ru.scanword.repository.UserRepository;
 import ru.scanword.service.SolvableScawordService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +29,7 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
     private final SolvableScanwordRepository solvableScanwordRepository;
     private final UserRepository userRepository;
+    private final ScanwordRepository scanwordRepository;
 
 
     @Override
@@ -75,16 +79,42 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
+    public SolvableScanwordDTO createByScanwordId(Long scanwordId) {
+        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByName(securityUser.getUsername()).get();
+        Scanword scaword = scanwordRepository.getById(scanwordId);
+        SolvableScanwordDTO solvableScanwordDTO = new SolvableScanwordDTO();
+        solvableScanwordDTO.setScanword(scaword);
+        solvableScanwordDTO.setOwner(user);
+        solvableScanwordDTO.setSolved(false);
+        solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
+        return solvableScanwordDTO;
+    }
+
+    @Override
     @PreAuthorize("hasAuthority('read')")
     public List<QuestionDTO> getAllByScanwordId(Long scanwordId) {
         UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByName(securityUser.getUsername()).get();
 
         if (!solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).isPresent()) {
-            throw new ResourceNotFoundException("No link","");
+            createByScanwordId(scanwordId);
+            return new ArrayList<>();
         }
         return QuestionMapper.QUESTION_MAPPER.allToDTO(solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).get().getSolvedQuestions());
+    }
+
+    @Override
+    public QuestionDTO addResolvedQuestion(Long scanwordId,QuestionDTO questionDTO) {
+        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByName(securityUser.getUsername()).get();
+        SolvableScanwordDTO solvableScanwordDTO = toDTO(solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).get());
+        List<Question>  questionList = solvableScanwordDTO.getSolvedQuestions();
+        questionList.add(QuestionMapper.QUESTION_MAPPER.toEntity(questionDTO));
+        solvableScanwordDTO.setSolvedQuestions(questionList);
+        solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
+        return questionDTO;
     }
 
     private SolvableScanword toEntity(SolvableScanwordDTO solvableScanwordDTO){

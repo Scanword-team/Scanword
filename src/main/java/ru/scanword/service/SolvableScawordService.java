@@ -12,7 +12,9 @@ public interface SolvableScawordService {
     SolvableScanwordDTO create(SolvableScanwordDTO solvableScanwordDTO);
     SolvableScanwordDTO update(SolvableScanwordDTO solvableScanwordDTO);
     boolean deleteById(Long id);
-    List<QuestionDTO> getAllByScanwordId(Long scanwordId);
 
+    SolvableScanwordDTO createByScanwordId(Long scanwordId);
+    List<QuestionDTO> getAllByScanwordId(Long scanwordId);
+    QuestionDTO addResolvedQuestion(Long scanwordId, QuestionDTO questionDTO);
 
 }
