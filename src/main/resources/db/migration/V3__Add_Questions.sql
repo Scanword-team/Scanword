@@ -2698,7 +2698,7 @@ INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2698,'АГОГИКА',null,null,'Небольшое отклонение от темпа при исполнении музыкального произведения','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2699,'БИОХИМИЯ',null,null,'Наука, изучающая входящие в состав организмов химические вещества','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2700,'АЛЬМАНАХ',null,null,'Сборник произведений разных авторов','text');
-INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2701,'БОЯРЫШНИК',null,null,'Растение используемое для посадки в 'живую' изгородь','text');
+INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2701,'БОЯРЫШНИК',null,null,'Растение используемое для посадки в живую изгородь','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2702,'ФРОНТИСПИС',null,null,'Рисунок в книге на одном развороте с титульным листом, отражающий главную идею или наиболее характерные моменты содержания книги','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2703,'НАПРАВНИК',null,null,'Русский композитор, автор оперы "Дубровский"','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (2704,'АЖИО',null,null,'Превышение рыночной цены акций установленного номинала','text');
@@ -3086,7 +3086,7 @@ INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3086,'ДОНЕЦК',null,null,'Областной центр Украины','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3087,'ШИФЕР',null,null,'Глинистый сланец, употреблется для грифельных досок и в строительстве','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3088,'АКТИНОМЕТР',null,null,'Прибор для измерения интенсивности солнечного излучения','text');
-INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3089,'МОЛЧАЛИН',null,null,'Персонаж комедии А.Грибоедова 'Горе от ума'','text');
+INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3089,'МОЛЧАЛИН',null,null,'Персонаж комедии А.Грибоедова Горе от ума','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3090,'АЗИН',null,null,'Герой Гражданской войны','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3091,'ПАСИФЕЯ',null,null,'Спутник Юпитера','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (3092,'ШУВАЛОВ',null,null,'Русский государственный деятель, фаворит Елизаветы Петровны','text');
@@ -10332,7 +10332,7 @@ INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (1
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10332,'СЛОЙ',null,null,'Масса вещества, лежащая между чем-либо','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10333,'ФЛЮГЕР',null,null,'Флажок для указания направления ветра','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10334,'СВЕТОДИОД',null,null,'Полупроводниковый прибор для преобразования электрической энергии в световую','text');
-INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10335,'СЛОН',null,null,'Животное, изображенное на государственных символах Гвинеи, Кот-д'Ивуара, Свазиленда','text');
+INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10335,'СЛОН',null,null,'Животное, изображенное на государственных символах Гвинеи, Кот-дИвуара, Свазиленда','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10336,'ТРИММИНГ',null,null,'Выщипывание отмершей шерсти у собак','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10337,'ТОСТ',null,null,'Здравица','text');
 INSERT INTO public.question (id, answer, audio, image, question, type) VALUES (10338,'КИП',null,null,'Денежная единица в Лаосе','text');
