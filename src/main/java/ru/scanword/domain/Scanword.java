@@ -24,4 +24,6 @@ public class Scanword {
     @Column(name = "height")
     private int height;
 
+    @Column(name = "prompt")
+    private int prompt;
 }

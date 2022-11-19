@@ -9,4 +9,5 @@ public class ScanwordDTO {
     private String name;
     private int width;
     private int height;
+    private int prompt;
 }
