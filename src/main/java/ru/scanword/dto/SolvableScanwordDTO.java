@@ -5,6 +5,7 @@ import ru.scanword.domain.Question;
 import ru.scanword.domain.Scanword;
 import ru.scanword.domain.User;
 
+import javax.persistence.Column;
 import java.util.List;
 import java.util.Set;
 
@@ -15,5 +16,6 @@ public class SolvableScanwordDTO {
     private User owner;
     private Scanword scanword;
     private Boolean solved;
+    private int prompt;
     List<Question> solvedQuestions;
 }

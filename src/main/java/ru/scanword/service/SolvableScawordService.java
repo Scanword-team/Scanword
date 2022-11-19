@@ -1,6 +1,7 @@
 package ru.scanword.service;
 
 import ru.scanword.dto.QuestionDTO;
+import ru.scanword.dto.ScanwordDTO;
 import ru.scanword.dto.SolvableScanwordDTO;
 
 import java.util.List;
@@ -16,5 +17,6 @@ public interface SolvableScawordService {
     SolvableScanwordDTO createByScanwordId(Long scanwordId);
     List<QuestionDTO> getAllByScanwordId(Long scanwordId);
     QuestionDTO addResolvedQuestion(Long scanwordId, QuestionDTO questionDTO);
+    SolvableScanwordDTO decreasePromptById(Long id);
 
 }

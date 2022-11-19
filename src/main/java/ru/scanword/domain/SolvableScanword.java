@@ -26,6 +26,9 @@ public class SolvableScanword {
     @Column(name = "solved")
     private Boolean solved;
 
+    @Column(name = "prompt")
+    private int prompt;
+
     @ManyToMany
     @JoinTable(
             name = "solvable_scanword_question",

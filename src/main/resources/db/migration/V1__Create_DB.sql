@@ -32,6 +32,7 @@ create table solvable_scanword
     solved boolean,
     user_id int8,
     scanword_id int8,
+    prompt int4,
     primary key (id)
 );
 create table solvable_scanword_question

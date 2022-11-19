@@ -11,6 +11,7 @@ import ru.scanword.domain.Scanword;
 import ru.scanword.domain.SolvableScanword;
 import ru.scanword.domain.User;
 import ru.scanword.dto.QuestionDTO;
+import ru.scanword.dto.ScanwordDTO;
 import ru.scanword.dto.SolvableScanwordDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.QuestionMapper;
@@ -88,6 +89,7 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
         solvableScanwordDTO.setScanword(scaword);
         solvableScanwordDTO.setOwner(user);
         solvableScanwordDTO.setSolved(false);
+        solvableScanwordDTO.setPrompt(scaword.getPrompt());
         solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
         return solvableScanwordDTO;
     }
@@ -115,6 +117,16 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
         solvableScanwordDTO.setSolvedQuestions(questionList);
         solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
         return questionDTO;
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('read')")
+    public SolvableScanwordDTO decreasePromptById(Long id) {
+        SolvableScanwordDTO solvableScanwordDTO = toDTO(solvableScanwordRepository.getById(id));
+        solvableScanwordDTO.setPrompt(solvableScanwordDTO.getPrompt() - 1);
+        solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
+        return solvableScanwordDTO;
     }
 
     private SolvableScanword toEntity(SolvableScanwordDTO solvableScanwordDTO){

@@ -14,6 +14,6 @@ public interface ScanwordService {
     boolean deleteById(Long id);
 
     StatsDTO getStats(Long id);
-    ScanwordDTO updatePromptById(Long id, int value);
+
 
 }

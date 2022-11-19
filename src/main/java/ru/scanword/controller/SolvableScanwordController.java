@@ -52,4 +52,9 @@ public class SolvableScanwordController {
     public QuestionDTO addResolvedQuestion(@PathVariable Long scanwordId, @RequestBody QuestionDTO questionDTO) {
         return solvableScanwordService.addResolvedQuestion(scanwordId, questionDTO);
     }
+
+    @PostMapping("/decreasePromptById/{id}")
+    public SolvableScanwordDTO decreasePromptById(@PathVariable Long id) {
+        return solvableScanwordService.decreasePromptById(id);
+    }
 }

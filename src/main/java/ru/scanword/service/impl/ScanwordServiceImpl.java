@@ -91,15 +91,6 @@ public class ScanwordServiceImpl  implements ScanwordService {
         return new StatsDTO(resolved, total);
     }
 
-    @Override
-    @Transactional
-    @PreAuthorize("hasAuthority('read')")
-    public ScanwordDTO updatePromptById(Long id, int value) {
-        ScanwordDTO scanwordDTO = toDTO(scanwordRepository.getById(id));
-        scanwordDTO.setPrompt(value);
-        return scanwordDTO;
-    }
-
     private Scanword toEntity(ScanwordDTO connectionDTO){
         return ScanwordMapper.SCANWORD_MAPPER.toEntity(connectionDTO);
     }
