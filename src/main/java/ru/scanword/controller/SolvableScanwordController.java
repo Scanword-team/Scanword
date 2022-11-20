@@ -57,4 +57,8 @@ public class SolvableScanwordController {
     public SolvableScanwordDTO decreasePromptById(@PathVariable Long id) {
         return solvableScanwordService.decreasePromptById(id);
     }
+    @GetMapping("/getByScanwordId/{scanwordId}")
+    public SolvableScanwordDTO getByScanwordId(@PathVariable Long scanwordId) {
+        return solvableScanwordService.getByScanwordId(scanwordId);
+    }
 }
