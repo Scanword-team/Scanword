@@ -2,6 +2,7 @@ package ru.scanword.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.scanword.domain.Question;
 import ru.scanword.dto.QuestionDTO;
 import ru.scanword.dto.SolvableScanwordDTO;
 import ru.scanword.service.impl.SolvableScanwordServiceImpl;
@@ -52,6 +53,13 @@ public class SolvableScanwordController {
     public QuestionDTO addResolvedQuestion(@PathVariable Long scanwordId, @RequestBody QuestionDTO questionDTO) {
         return solvableScanwordService.addResolvedQuestion(scanwordId, questionDTO);
     }
+
+    @PostMapping("/updateResoledQuestionList/{scanwordId}")
+    public List<Question> updateResoledQuestionList(@PathVariable Long scanwordId, @RequestBody List<Question> questionList) {
+        return solvableScanwordService.updateResoledQuestionList(scanwordId, questionList);
+    }
+
+
 
     @PostMapping("/decreasePromptById/{id}")
     public SolvableScanwordDTO decreasePromptById(@PathVariable Long id) {

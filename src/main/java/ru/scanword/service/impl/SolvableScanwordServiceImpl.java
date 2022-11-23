@@ -122,6 +122,16 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
     }
 
     @Override
+    public List<Question> updateResoledQuestionList(Long scanwordId, List<Question> questionList) {
+        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByName(securityUser.getUsername()).get();
+        SolvableScanwordDTO solvableScanwordDTO = toDTO(solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).get());
+        solvableScanwordDTO.setSolvedQuestions(questionList);
+        solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
+        return questionList;
+    }
+
+    @Override
     @Transactional
     @PreAuthorize("hasAuthority('read')")
     public SolvableScanwordDTO decreasePromptById(Long id) {
