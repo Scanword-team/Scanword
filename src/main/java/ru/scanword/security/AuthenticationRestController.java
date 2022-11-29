@@ -16,6 +16,7 @@ import ru.scanword.domain.User;
 import ru.scanword.domain.enums.Role;
 import ru.scanword.domain.enums.Status;
 import ru.scanword.dto.UserDTO;
+import ru.scanword.exceptions.InvalidAuthenticationInformationException;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.repository.UserRepository;
 import ru.scanword.service.impl.UserServiceImpl;
@@ -67,7 +68,7 @@ public class AuthenticationRestController {
             response.put("token", token);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return new ResponseEntity<>("Invalid username/password combination", HttpStatus.FORBIDDEN);
+            throw new InvalidAuthenticationInformationException("Invalid username/password combination", "");
         }
     }
 

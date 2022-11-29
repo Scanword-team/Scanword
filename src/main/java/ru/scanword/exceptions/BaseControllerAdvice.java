@@ -21,6 +21,11 @@ public class BaseControllerAdvice {
         return response(HttpStatus.NOT_FOUND, e);
     }
 
+    @ExceptionHandler(InvalidAuthenticationInformationException.class)
+    public Object invalidAuthenticationInformationException(ResourceNotFoundException e) {
+        return response(HttpStatus.FORBIDDEN, e);
+    }
+
     @ExceptionHandler(NoPermissionException.class)
     public Object noPermissionException(NoPermissionException e) {
         return response(HttpStatus.FORBIDDEN, e);
