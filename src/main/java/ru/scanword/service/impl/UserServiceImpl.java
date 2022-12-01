@@ -72,7 +72,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
-        userDTO.setRole(Role.USER);
         userDTO.setStatus(Status.ACTIVE);
         userRepository.save(toEntity(userDTO));
         return userDTO;

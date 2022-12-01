@@ -10,6 +10,9 @@ public enum Role {
     USER(new HashSet<Permission>(){{
         add(Permission.READ);
     }}),
+    GUEST(new HashSet<Permission>(){{
+        add(Permission.READ);
+    }}),
     ADMIN(new HashSet<Permission>(){{
         add(Permission.READ);
         add(Permission.WRITE);
