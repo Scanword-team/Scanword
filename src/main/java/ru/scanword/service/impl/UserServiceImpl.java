@@ -21,8 +21,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    //private final UserServiceImpl audioQuestionService;
-
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('read')")
@@ -42,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public UserDTO create(UserDTO userDTO) {
         userRepository.save(toEntity(userDTO));
         return userDTO;
@@ -50,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public UserDTO update(UserDTO userDTO) {
         if(!(userRepository.findById(userDTO.getId()).isPresent())) {
             throw new ResourceNotFoundException("AudioQuestion with id = " + userDTO.getId() + " not found", "");
@@ -60,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public boolean deleteById(Long id) {
         if (!(userRepository.findById(id).isPresent())) {
             throw new ResourceNotFoundException("AudioQuestion with id = " + id + " not found", "");

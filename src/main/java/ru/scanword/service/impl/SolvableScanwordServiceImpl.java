@@ -52,7 +52,7 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('save')")
     public SolvableScanwordDTO create(SolvableScanwordDTO solvableScanwordDTO) {
         solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
         return solvableScanwordDTO;
@@ -60,7 +60,7 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('save')")
     public SolvableScanwordDTO update(SolvableScanwordDTO solvableScanwordDTO) {
         if(!(solvableScanwordRepository.findById(solvableScanwordDTO.getId()).isPresent())) {
             throw new ResourceNotFoundException("SolvableScanword with id = " + solvableScanwordDTO.getId() + " not found", "");
@@ -70,7 +70,7 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public boolean deleteById(Long id) {
         if (!(solvableScanwordRepository.findById(id).isPresent())) {
             throw new ResourceNotFoundException("SolvableScanword with id = " + id + " not found", "");
@@ -81,6 +81,7 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('read')")
     public SolvableScanwordDTO createByScanwordId(Long scanwordId) {
         UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByName(securityUser.getUsername()).get();
@@ -103,25 +104,12 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
 
         if (!solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).isPresent()) {
             createByScanwordId(scanwordId);
-            //return new ArrayList<>();
         }
         return QuestionMapper.QUESTION_MAPPER.allToDTO(solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).get().getSolvedQuestions());
     }
 
     @Override
-    public QuestionDTO addResolvedQuestion(Long scanwordId,QuestionDTO questionDTO) {
-        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = userRepository.findByName(securityUser.getUsername()).get();
-        SolvableScanwordDTO solvableScanwordDTO = toDTO(solvableScanwordRepository.findByScanwordIdAndOwner(scanwordId, user).get());
-        List<Question>  questionList = solvableScanwordDTO.getSolvedQuestions();
-        questionList.add(QuestionMapper.QUESTION_MAPPER.toEntity(questionDTO));
-        solvableScanwordDTO.setSolvedQuestions(questionList);
-        solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
-
-        return questionDTO;
-    }
-
-    @Override
+    @PreAuthorize("hasAuthority('save')")
     public List<Question> updateResoledQuestionList(Long scanwordId, List<Question> questionList) {
         UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByName(securityUser.getUsername()).get();

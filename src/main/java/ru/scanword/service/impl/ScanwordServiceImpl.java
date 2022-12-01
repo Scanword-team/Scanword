@@ -28,8 +28,6 @@ public class ScanwordServiceImpl  implements ScanwordService {
     private final UserRepository userRepository;
     private final SolvableScanwordRepository solvableScanwordRepository;
 
-    //private final ScanwordServiceImpl scanwordService;
-
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('read')")
@@ -49,7 +47,7 @@ public class ScanwordServiceImpl  implements ScanwordService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public ScanwordDTO create(ScanwordDTO scanwordDTO) {
         scanwordRepository.save(toEntity(scanwordDTO));
         return scanwordDTO;
@@ -57,7 +55,7 @@ public class ScanwordServiceImpl  implements ScanwordService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public ScanwordDTO update(ScanwordDTO scanwordDTO) {
         if(!(scanwordRepository.findById(scanwordDTO.getId()).isPresent())) {
             throw new ResourceNotFoundException("Scanword with id = " + scanwordDTO.getId() + " not found", "");
@@ -67,7 +65,7 @@ public class ScanwordServiceImpl  implements ScanwordService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public boolean deleteById(Long id) {
         if (!(scanwordRepository.findById(id).isPresent())) {
             throw new ResourceNotFoundException("Scanword with id = " + id + " not found", "");

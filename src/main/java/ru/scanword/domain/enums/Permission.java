@@ -2,7 +2,8 @@ package ru.scanword.domain.enums;
 
 public enum Permission {
     READ("read"),
-    WRITE("write");
+    SAVE("save"),
+    CREATE("write");
 
     private final String permission;
 

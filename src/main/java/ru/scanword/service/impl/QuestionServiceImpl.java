@@ -19,8 +19,6 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    //private final QuestionServiceImpl questionService;
-
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('read')")
@@ -40,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public QuestionDTO create(QuestionDTO questionDTO) {
         questionRepository.save(toEntity(questionDTO));
         return questionDTO;
@@ -48,7 +46,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public QuestionDTO update(QuestionDTO questionDTO) {
         if(!(questionRepository.findById(questionDTO.getId()).isPresent())) {
             throw new ResourceNotFoundException("Question with id = " + questionDTO.getId() + " not found", "");
@@ -58,7 +56,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public boolean deleteById(Long id) {
         if (!(questionRepository.findById(id).isPresent())) {
             throw new ResourceNotFoundException("Question with id = " + id + " not found", "");

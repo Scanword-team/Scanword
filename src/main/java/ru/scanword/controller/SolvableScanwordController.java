@@ -49,22 +49,16 @@ public class SolvableScanwordController {
         return solvableScanwordService.getAllByScanwordId(scanwordId);
     }
 
-    @PostMapping("/addResolvedQuestion/{scanwordId}")
-    public QuestionDTO addResolvedQuestion(@PathVariable Long scanwordId, @RequestBody QuestionDTO questionDTO) {
-        return solvableScanwordService.addResolvedQuestion(scanwordId, questionDTO);
-    }
-
     @PostMapping("/updateResoledQuestionList/{scanwordId}")
     public List<Question> updateResoledQuestionList(@PathVariable Long scanwordId, @RequestBody List<Question> questionList) {
         return solvableScanwordService.updateResoledQuestionList(scanwordId, questionList);
     }
 
-
-
     @PostMapping("/decreasePromptById/{id}")
     public SolvableScanwordDTO decreasePromptById(@PathVariable Long id) {
         return solvableScanwordService.decreasePromptById(id);
     }
+
     @GetMapping("/getByScanwordId/{scanwordId}")
     public SolvableScanwordDTO getByScanwordId(@PathVariable Long scanwordId) {
         return solvableScanwordService.getByScanwordId(scanwordId);

@@ -21,8 +21,6 @@ import java.util.List;
 public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
 
     private final ScanwordQuestionRepository scanwordQuestionRepository;
-    private final ScanwordRepository scanwordRepository;
-    private final QuestionRepository questionRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -48,7 +46,7 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public ScanwordQuestionDTO create(ScanwordQuestionDTO scanwordQuestionDTO) {
         scanwordQuestionRepository.save(toEntity(scanwordQuestionDTO));
         return scanwordQuestionDTO;
@@ -56,7 +54,7 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public ScanwordQuestionDTO update(ScanwordQuestionDTO scanwordQuestionDTO) {
         if (!(scanwordQuestionRepository.findByScanwordIdAndQuestionId(scanwordQuestionDTO.getScanword().getId(), scanwordQuestionDTO.getQuestion().getId()).isPresent())) {
             throw new ResourceNotFoundException("ScanwordQuestion with  scanword id = " + scanwordQuestionDTO.getScanword().getId() + " and question id = " + scanwordQuestionDTO.getQuestion().getId() + " not found", "");
@@ -66,7 +64,7 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
 
     @Override
     @Transactional
-    @PreAuthorize("hasAuthority('write')")
+    @PreAuthorize("hasAuthority('create')")
     public boolean deleteById(Long scanword_id, Long question_id) {
         if (!(scanwordQuestionRepository.findByScanwordIdAndQuestionId(scanword_id, question_id).isPresent())) {
             throw new ResourceNotFoundException("ScanwordQuestion with  scanword id = " + scanword_id + " and question id = " + question_id + " not found", "");

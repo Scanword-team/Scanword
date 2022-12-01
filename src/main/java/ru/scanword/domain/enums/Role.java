@@ -7,15 +7,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum Role {
-    USER(new HashSet<Permission>(){{
-        add(Permission.READ);
-    }}),
     GUEST(new HashSet<Permission>(){{
         add(Permission.READ);
+
+    }}),
+    USER(new HashSet<Permission>(){{
+        add(Permission.READ);
+        add(Permission.SAVE);
     }}),
     ADMIN(new HashSet<Permission>(){{
         add(Permission.READ);
-        add(Permission.WRITE);
+        add(Permission.SAVE);
+        add(Permission.CREATE);
     }});
 
     private final Set<Permission> permissions;

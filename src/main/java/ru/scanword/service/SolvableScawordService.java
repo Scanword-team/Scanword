@@ -17,7 +17,6 @@ public interface SolvableScawordService {
 
     SolvableScanwordDTO createByScanwordId(Long scanwordId);
     List<QuestionDTO> getAllByScanwordId(Long scanwordId);
-    QuestionDTO addResolvedQuestion(Long scanwordId, QuestionDTO questionDTO);
     List<Question> updateResoledQuestionList(Long scanwordId, List<Question> questionList);
 
     SolvableScanwordDTO decreasePromptById(Long id);
