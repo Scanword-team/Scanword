@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface SolvableScanwordRepository extends JpaRepository<SolvableScanword, Long> {
     Optional<SolvableScanword> findByScanwordIdAndOwner(Long scanwordId, User owner);
+    void deleteByOwner(User user);
 }

@@ -10,6 +10,7 @@ import ru.scanword.domain.enums.Status;
 import ru.scanword.dto.UserDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.UserMapper;
+import ru.scanword.repository.SolvableScanwordRepository;
 import ru.scanword.repository.UserRepository;
 import ru.scanword.service.UserService;
 
@@ -20,6 +21,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final SolvableScanwordRepository solvableScanwordRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -73,6 +75,16 @@ public class UserServiceImpl implements UserService {
         userDTO.setStatus(Status.ACTIVE);
         userRepository.save(toEntity(userDTO));
         return userDTO;
+    }
+
+    @Override
+    @Transactional
+    @PreAuthorize("hasAuthority('read')")
+    public boolean deleteGuest(UserDTO userDTO) {
+        User user = toEntity(userDTO);
+        solvableScanwordRepository.deleteByOwner(user);
+        userRepository.delete(user);
+        return (userRepository.findById(user.getId()).isPresent());
     }
 
     private User toEntity(UserDTO userDTO){

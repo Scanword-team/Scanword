@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.scanword.domain.User;
 import ru.scanword.domain.enums.Role;
-import ru.scanword.domain.enums.Status;
 import ru.scanword.dto.UserDTO;
 import ru.scanword.exceptions.InvalidAuthenticationInformationException;
 import ru.scanword.exceptions.ResourceNotFoundException;
@@ -30,8 +28,6 @@ import ru.scanword.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -121,10 +117,11 @@ public class AuthenticationRestController {
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findByName(securityUser.getUsername()).get();
-        UserDTO dtoUser = UserMapper.USER_MAPPER.toDTO(user);
-        guests.remove(dtoUser);
-        userRepository.delete(user);
-
+        if (user.getRole() == Role.GUEST) {
+            UserDTO userDTO = UserMapper.USER_MAPPER.toDTO(user);
+            guests.remove(userDTO);
+            userService.deleteGuest(userDTO);
+        }
         SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
         securityContextLogoutHandler.logout(request, response, null);
     }

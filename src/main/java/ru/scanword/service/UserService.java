@@ -13,4 +13,6 @@ public interface UserService {
     boolean deleteById(Long id);
     UserDTO createUser(UserDTO userDTO);
 
+    boolean deleteGuest(UserDTO userDTO);
+
 }
