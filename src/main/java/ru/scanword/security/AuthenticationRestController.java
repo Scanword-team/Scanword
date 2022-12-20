@@ -55,7 +55,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody AuthenticationRequestDTO requestDTO) {
+    public ResponseEntity<?> register(@RequestBody AuthenticationRequestDTO requestDTO) {
         if (GUEST_REGEX.matcher(requestDTO.getUsername()).matches()) {
             throw new ResourceNotFoundException("User with name = " + requestDTO.getUsername() + " already exist", "");
         }
@@ -65,6 +65,10 @@ public class AuthenticationRestController {
             userDTO.setRole(Role.USER);
             userDTO.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
             userService.createUser(userDTO);
+
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", requestDTO.getUsername());
+            return ResponseEntity.ok(response);
         } else {
             throw new ResourceNotFoundException("User with name = " + requestDTO.getUsername() + " already exist", "");
         }
