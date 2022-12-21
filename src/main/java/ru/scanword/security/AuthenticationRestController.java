@@ -56,38 +56,22 @@ public class AuthenticationRestController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AuthenticationRequestDTO requestDTO) {
-        if (GUEST_REGEX.matcher(requestDTO.getUsername()).matches()) {
-            throw new ResourceNotFoundException("User with name = " + requestDTO.getUsername() + " already exist", "");
-        }
-        if (!userRepository.findByName(requestDTO.getUsername()).isPresent()) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setName(requestDTO.getUsername());
-            userDTO.setRole(Role.USER);
-            userDTO.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
-            userService.createUser(userDTO);
+        return register(requestDTO, Role.USER);
+    }
 
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", requestDTO.getUsername());
-            return ResponseEntity.ok(response);
-        } else {
-            throw new ResourceNotFoundException("User with name = " + requestDTO.getUsername() + " already exist", "");
-        }
+    @PostMapping("/registerAdmin")
+    public ResponseEntity<?> registerAdmin(@RequestBody AuthenticationRequestDTO requestDTO) {
+        return register(requestDTO, Role.ADMIN);
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequestDTO requestDTO) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword()));
-            User user = userRepository.findByName(requestDTO.getUsername()).get();
-            String token = jwtTokenProvider.createToken(requestDTO.getUsername(), user.getPassword());
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", requestDTO.getUsername());
-            response.put("role", user.getRole());
-            response.put("token", token);
-            return ResponseEntity.ok(response);
-        } catch (AuthenticationException e) {
-            throw new InvalidAuthenticationInformationException("Invalid username/password combination", "");
-        }
+        return authenticate(requestDTO, Role.USER);
+    }
+
+    @PostMapping("/loginAdmin")
+    public ResponseEntity<?> authenticateAdmin(@RequestBody AuthenticationRequestDTO requestDTO) {
+        return authenticate(requestDTO, Role.ADMIN);
     }
 
     @PostMapping("/loginGuest")
@@ -114,7 +98,44 @@ public class AuthenticationRestController {
         AuthenticationRequestDTO requestDTO = new AuthenticationRequestDTO();
         requestDTO.setUsername(guestDTO.getName());
         requestDTO.setPassword("guest");
-        return authenticate(requestDTO);
+        return authenticate(requestDTO, Role.GUEST);
+    }
+
+    ResponseEntity<?> authenticate(AuthenticationRequestDTO requestDTO, Role role) {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestDTO.getUsername(), requestDTO.getPassword()));
+            User user = userRepository.findByName(requestDTO.getUsername()).get();
+            if (user.getRole() != role) {
+                throw new InvalidAuthenticationInformationException("Permission denied", "");
+            }
+            String token = jwtTokenProvider.createToken(requestDTO.getUsername(), user.getPassword());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", requestDTO.getUsername());
+            response.put("role", user.getRole());
+            response.put("token", token);
+            return ResponseEntity.ok(response);
+        } catch (AuthenticationException e) {
+            throw new InvalidAuthenticationInformationException("Invalid username/password combination", "");
+        }
+    }
+
+    private ResponseEntity<?> register(AuthenticationRequestDTO requestDTO, Role role) {
+        if (GUEST_REGEX.matcher(requestDTO.getUsername()).matches()) {
+            throw new ResourceNotFoundException("User with name = " + requestDTO.getUsername() + " already exist", "");
+        }
+        if (!userRepository.findByName(requestDTO.getUsername()).isPresent()) {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setName(requestDTO.getUsername());
+            userDTO.setRole(role);
+            userDTO.setPassword(passwordEncoder.encode(requestDTO.getPassword()));
+            userService.createUser(userDTO);
+
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", requestDTO.getUsername());
+            return ResponseEntity.ok(response);
+        } else {
+            throw new ResourceNotFoundException("User with name = " + requestDTO.getUsername() + " already exist", "");
+        }
     }
 
     @PostMapping("/logout")
