@@ -24,14 +24,15 @@ public class Question {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "audio")
-    private String audio;
+    @ManyToOne
+    @JoinColumn(name = "dictionary_id")
+    private Dictionary dictionary;
 
-    @Column(name = "image")
-    private String image;
+    @ManyToOne
+    @JoinColumn(name = "audio_id")
+    private Audio audio;
 
-
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 }
