@@ -95,9 +95,10 @@ public class QuestionServiceImpl implements QuestionService {
             question.setQuestion(questinOnlyIdDTO.getQuestion());
             question.setAnswer(questinOnlyIdDTO.getAnswer());
             question.setType(questinOnlyIdDTO.getType());
-            question.setAudio(audioRepository.getById(questinOnlyIdDTO.getAudioId()));
-            question.setImage(imageRepository.getById(questinOnlyIdDTO.getImageId()));
-            question.setDictionary(dictionaryRepository.getById(questinOnlyIdDTO.getDictionaryId()));
+            question.setAudio(questinOnlyIdDTO.getAudioId() == null ? null : audioRepository.getById(questinOnlyIdDTO.getAudioId()));
+            question.setImage(questinOnlyIdDTO.getImageId() == null ? null : imageRepository.getById(questinOnlyIdDTO.getImageId()));
+            question.setDictionary(questinOnlyIdDTO.getDictionaryId() == null ? null : dictionaryRepository.getById(questinOnlyIdDTO.getDictionaryId()));
+            questionList.add(question);
         }
         return questionList;
     }
