@@ -19,6 +19,11 @@ public class QuestionController {
         return questionService.getAll();
     }
 
+    @GetMapping("getByDictId/{id}")
+    public List<QuestionDTO> getAllByDictionaryId(@PathVariable Long id) {
+        return questionService.getAllByDictionaryId(id);
+    }
+
     @GetMapping("getById/{id}")
     public QuestionDTO getById(@PathVariable Long id) {
         if (id != null) {
