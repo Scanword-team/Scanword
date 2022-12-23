@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.Dictionary;
 import ru.scanword.domain.Question;
+import ru.scanword.dto.QuestinOnlyIdDTO;
 import ru.scanword.dto.QuestionDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.QuestionMapper;
+import ru.scanword.repository.AudioRepository;
 import ru.scanword.repository.DictionaryRepository;
+import ru.scanword.repository.ImageRepository;
 import ru.scanword.repository.QuestionRepository;
 import ru.scanword.service.QuestionService;
 
@@ -22,6 +25,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final DictionaryRepository dictionaryRepository;
+    private final AudioRepository audioRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -64,6 +69,19 @@ public class QuestionServiceImpl implements QuestionService {
         }
         questionRepository.save(toEntity(questionDTO));
         return questionDTO;
+    }
+
+    public QuestionDTO saveWithID(QuestinOnlyIdDTO questinOnlyIdDTO) {
+        Question question = new Question();
+        question.setId(questinOnlyIdDTO.getId());
+        question.setQuestion(questinOnlyIdDTO.getQuestion());
+        question.setAnswer(questinOnlyIdDTO.getAnswer());
+        question.setType(questinOnlyIdDTO.getType());
+        question.setAudio(audioRepository.getById(questinOnlyIdDTO.getAudioId()));
+        question.setImage(imageRepository.getById(questinOnlyIdDTO.getImageId()));
+        question.setDictionary(dictionaryRepository.getById(questinOnlyIdDTO.getDictionaryId()));
+        questionRepository.save(question);
+        return toDTO(question);
     }
 
     @Override

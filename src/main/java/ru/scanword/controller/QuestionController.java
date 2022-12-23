@@ -2,10 +2,12 @@ package ru.scanword.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.scanword.dto.QuestinOnlyIdDTO;
 import ru.scanword.dto.QuestionDTO;
 import ru.scanword.service.impl.QuestionServiceImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +23,12 @@ public class QuestionController {
 
     @GetMapping("getByDictId/{id}")
     public List<QuestionDTO> getAllByDictionaryId(@PathVariable Long id) {
-        return questionService.getAllByDictionaryId(id);
+        return questionService.getAllByDictionaryId(id).stream().filter(q -> q.getId() <= 100).collect(Collectors.toList()); // hack for more quickly work with dictionary page
+    }
+
+    @PostMapping("/saveWithIds")
+    public QuestionDTO saveQuestionWithIds(@RequestBody QuestinOnlyIdDTO questinOnlyIdDTO) {
+        return questionService.saveWithID(questinOnlyIdDTO);
     }
 
     @GetMapping("getById/{id}")
@@ -43,7 +50,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/deleteById/{id}")
-    public boolean deleteById(@PathVariable Long id){
+    public boolean deleteById(@PathVariable Long id) {
         return questionService.deleteById(id);
     }
 }
