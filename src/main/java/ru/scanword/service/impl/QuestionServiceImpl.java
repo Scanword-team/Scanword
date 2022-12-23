@@ -82,8 +82,8 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional
     @PreAuthorize("hasAuthority('create')")
-    public boolean deleteAll(List<QuestinOnlyIdDTO> dtoList) {
-        questionRepository.deleteAll(convertOnlyIdDTOToEntity(dtoList));
+    public boolean deleteAll(List<QuestionDTO> dtoList) {
+        questionRepository.deleteAll(allToEntity(dtoList));
         return true;
     }
 

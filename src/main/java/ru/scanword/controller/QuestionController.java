@@ -31,9 +31,9 @@ public class QuestionController {
         return questionService.saveAll(questinOnlyIdDTOS);
     }
 
-    @PostMapping("/deleteAll")
-    public boolean deleteAllWithOnlyIDS(@RequestBody List<QuestinOnlyIdDTO> questinOnlyIdDTOS) {
-        return questionService.deleteAll(questinOnlyIdDTOS);
+    @DeleteMapping("/deleteAll")
+    public boolean deleteAllWithOnlyIDS(@RequestBody List<QuestionDTO> questionDTOList) {
+        return questionService.deleteAll(questionDTOList);
     }
 
     @GetMapping("getById/{id}")
