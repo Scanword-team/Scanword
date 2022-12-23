@@ -4,7 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.scanword.domain.User;
-import ru.scanword.domain.enums.Status;
 
 import java.util.Collection;
 import java.util.List;
@@ -62,10 +61,10 @@ public class SecurityUser implements UserDetails {
 
         return new org.springframework.security.core.userdetails.User(
                 user.getName(), user.getPassword(),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getStatus().equals(Status.ACTIVE),
-                user.getStatus().equals(Status.ACTIVE),
+                true,
+                true,
+                true,
+                true,
                 user.getRole().getAuthorities()
         );
     }

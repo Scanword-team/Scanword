@@ -2,7 +2,6 @@ package ru.scanword.domain;
 
 import lombok.Data;
 import ru.scanword.domain.enums.Role;
-import ru.scanword.domain.enums.Status;
 
 import javax.persistence.*;
 
@@ -25,9 +24,5 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     @Column(name = "role")
     private Role role;
-
-    @Enumerated(value = EnumType.STRING)
-    @Column(name = "status")
-    private Status status;
 
 }

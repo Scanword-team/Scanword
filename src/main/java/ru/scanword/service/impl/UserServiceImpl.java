@@ -5,8 +5,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.User;
-import ru.scanword.domain.enums.Role;
-import ru.scanword.domain.enums.Status;
 import ru.scanword.dto.UserDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.UserMapper;
@@ -72,7 +70,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
-        userDTO.setStatus(Status.ACTIVE);
         userRepository.save(toEntity(userDTO));
         return userDTO;
     }
