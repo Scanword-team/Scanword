@@ -2,10 +2,8 @@ package ru.scanword.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.scanword.dto.QuestionDTO;
 import ru.scanword.dto.ScanwordDTO;
 import ru.scanword.dto.StatsDTO;
-import ru.scanword.service.impl.QuestionServiceImpl;
 import ru.scanword.service.impl.ScanwordServiceImpl;
 
 import java.util.List;
@@ -20,6 +18,11 @@ public class ScanwordController {
     @GetMapping
     public List<ScanwordDTO> getAll() {
         return scanwordService.getAll();
+    }
+
+    @GetMapping("getAllWithQuestions")
+    public List<ScanwordDTO> getAllWithQuestions() {
+        return scanwordService.getAllWithQuestions();
     }
 
     @GetMapping("getById/{id}")

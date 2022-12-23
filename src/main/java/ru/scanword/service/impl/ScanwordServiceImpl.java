@@ -35,6 +35,14 @@ public class ScanwordServiceImpl  implements ScanwordService {
         return allToDTO(scanwordRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('read')")
+    public List<ScanwordDTO> getAllWithQuestions() {
+        List<Scanword> scanwords = scanwordRepository.findAll();
+        scanwords.removeIf(s -> scanwordQuestionRepository.findAllByScanword(s).isEmpty());
+        return allToDTO(scanwords);
+    }
+
     @Override
     @Transactional(readOnly = true)
     @PreAuthorize("hasAuthority('read')")
@@ -104,4 +112,5 @@ public class ScanwordServiceImpl  implements ScanwordService {
     private List<ScanwordDTO> allToDTO(List<Scanword> connectionList){
         return ScanwordMapper.SCANWORD_MAPPER.allToDTO(connectionList);
     }
+
 }
