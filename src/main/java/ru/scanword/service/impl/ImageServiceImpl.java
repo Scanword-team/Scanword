@@ -9,6 +9,7 @@ import ru.scanword.dto.ImageDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.ImageMapper;
 import ru.scanword.repository.ImageRepository;
+import ru.scanword.repository.QuestionRepository;
 import ru.scanword.service.ImageService;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
+    private final QuestionRepository questionRepository;
 
     @Override
     @Transactional
@@ -50,7 +52,17 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     @PreAuthorize("hasAuthority('create')")
     public boolean saveAll(List<ImageDTO> imageDTOList) {
+        List<Image> images = imageRepository.findAll();
+        imageDTOList.forEach(audio-> {
+            images.removeIf(a-> a.getId().equals(audio.getId()));
+        });
+
         imageRepository.saveAll(allToEntity(imageDTOList));
+        images.forEach(image -> {
+            if(questionRepository.findQuestionByImage(image).isEmpty()) {
+                imageRepository.deleteById(image.getId());
+            }
+        });
         return true;
     }
 

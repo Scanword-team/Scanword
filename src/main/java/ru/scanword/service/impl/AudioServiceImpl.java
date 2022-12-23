@@ -5,13 +5,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.Audio;
-import ru.scanword.domain.Dictionary;
 import ru.scanword.dto.AudioDTO;
-import ru.scanword.dto.DictionaryDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.AudioMapper;
-import ru.scanword.mapper.DictionaryMapper;
 import ru.scanword.repository.AudioRepository;
+import ru.scanword.repository.QuestionRepository;
 import ru.scanword.service.AudioService;
 
 import java.util.List;
@@ -22,6 +20,7 @@ import java.util.Optional;
 public class AudioServiceImpl implements AudioService {
 
     private final AudioRepository audioRepository;
+    private final QuestionRepository questionRepository;
 
     @Override
     @Transactional
@@ -52,7 +51,17 @@ public class AudioServiceImpl implements AudioService {
 
     @Transactional
     public boolean saveAll(List<AudioDTO> audioDTOS) {
+        List<Audio> audios = audioRepository.findAll();
+        audioDTOS.forEach(audio-> {
+            audios.removeIf(a-> a.getId().equals(audio.getId()));
+        });
+
         audioRepository.saveAll(allToEntity(audioDTOS));
+        audios.forEach(audio -> {
+            if(questionRepository.findQuestionByAudio(audio).isEmpty()) {
+                audioRepository.deleteById(audio.getId());
+            }
+        });
         return true;
     }
 
