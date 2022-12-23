@@ -2,6 +2,7 @@ package ru.scanword.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.scanword.dto.ScanwordDTO;
 import ru.scanword.dto.ScanwordQuestionAllDTO;
 import ru.scanword.dto.ScanwordQuestionDTO;
 import ru.scanword.service.impl.ScanwordQuestionServiceImpl;
@@ -33,6 +34,10 @@ public class ScanwordQuestionController {
         return scanwordQuestionService.getAllByScanwordId(scanword_id);
     }
 
+    @PostMapping("getAllByScanword/")
+    public List<ScanwordQuestionDTO> getAllByScanwordId(@RequestBody ScanwordDTO scanwordDTO) {
+        return scanwordQuestionService.getAllByScanword(scanwordDTO);
+    }
 
     @PostMapping("/create")
     ScanwordQuestionDTO create(@RequestBody ScanwordQuestionDTO scanwordQuestionDTO) {

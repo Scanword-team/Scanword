@@ -5,9 +5,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.ScanwordQuestion;
+import ru.scanword.dto.ScanwordDTO;
 import ru.scanword.dto.ScanwordQuestionAllDTO;
 import ru.scanword.dto.ScanwordQuestionDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
+import ru.scanword.mapper.ScanwordMapper;
 import ru.scanword.mapper.ScanwordQuestionMapper;
 import ru.scanword.repository.QuestionRepository;
 import ru.scanword.repository.ScanwordQuestionRepository;
@@ -28,6 +30,12 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
     @PreAuthorize("hasAuthority('read')")
     public List<ScanwordQuestionDTO> getAll() {
         return allToDTO(scanwordQuestionRepository.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('read')")
+    public List<ScanwordQuestionDTO> getAllByScanword(ScanwordDTO scanwordDTO) {
+        return allToDTO(scanwordQuestionRepository.findAllByScanword(ScanwordMapper.SCANWORD_MAPPER.toEntity(scanwordDTO)));
     }
 
     @Override
