@@ -50,6 +50,12 @@ public class AudioServiceImpl implements AudioService {
         return audioDTO;
     }
 
+    @Transactional
+    public boolean saveAll(List<AudioDTO> audioDTOS) {
+        audioRepository.saveAll(allToEntity(audioDTOS));
+        return true;
+    }
+
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('create')")

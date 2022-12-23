@@ -27,6 +27,11 @@ public class AudioController {
         return audioService.create(audioDTO);
     }
 
+    @PostMapping("/saveAll")
+    boolean create(@RequestBody List<AudioDTO> audioDTO) {
+        return audioService.saveAll(audioDTO);
+    }
+
     @GetMapping("getById/{id}")
     public AudioDTO getById(@PathVariable Long id) {
         if (id != null) {
