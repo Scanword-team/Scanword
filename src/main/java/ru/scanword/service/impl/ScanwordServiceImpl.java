@@ -49,8 +49,8 @@ public class ScanwordServiceImpl  implements ScanwordService {
     @Transactional
     @PreAuthorize("hasAuthority('create')")
     public ScanwordDTO create(ScanwordDTO scanwordDTO) {
-        scanwordRepository.save(toEntity(scanwordDTO));
-        return scanwordDTO;
+        Scanword scanword = scanwordRepository.save(toEntity(scanwordDTO));
+        return toDTO(scanword);
     }
 
     @Override
