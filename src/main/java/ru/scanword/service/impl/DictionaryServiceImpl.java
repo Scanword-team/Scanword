@@ -36,8 +36,8 @@ public class DictionaryServiceImpl implements DictionaryService {
     @Transactional
     @PreAuthorize("hasAuthority('create')")
     public DictionaryDTO create(DictionaryDTO dictionaryDTO) {
-        dictionaryRepository.save(toEntity(dictionaryDTO));
-        return dictionaryDTO;
+        Dictionary dictionary = dictionaryRepository.save(toEntity(dictionaryDTO));
+        return toDTO(dictionary);
     }
 
     private Dictionary toEntity(DictionaryDTO dictionaryDTO) {
