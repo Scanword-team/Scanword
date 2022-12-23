@@ -7,7 +7,6 @@ import ru.scanword.dto.QuestionDTO;
 import ru.scanword.service.impl.QuestionServiceImpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +22,7 @@ public class QuestionController {
 
     @GetMapping("getByDictId/{id}")
     public List<QuestionDTO> getAllByDictionaryId(@PathVariable Long id) {
-        return questionService.getAllByDictionaryId(id).stream().filter(q -> q.getId() <= 100).collect(Collectors.toList()); // hack for more quickly work with dictionary page
+        return questionService.getAllByDictionaryId(id);
     }
 
     @PostMapping("/saveAll")
