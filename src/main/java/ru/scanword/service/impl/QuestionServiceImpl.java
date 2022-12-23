@@ -55,6 +55,13 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     @PreAuthorize("hasAuthority('create')")
     public QuestionDTO create(QuestionDTO questionDTO) {
+        if (questionDTO.getAudio() != null) {
+            questionDTO.setType("audio");
+        } else if (questionDTO.getImage() != null) {
+            questionDTO.setType("image");
+        } else {
+            questionDTO.setType("text");
+        }
         questionRepository.save(toEntity(questionDTO));
         return questionDTO;
     }
