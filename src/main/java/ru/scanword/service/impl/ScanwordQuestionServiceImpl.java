@@ -5,15 +5,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.scanword.domain.ScanwordQuestion;
+import ru.scanword.dto.ScanwordQuestionAllDTO;
 import ru.scanword.dto.ScanwordQuestionDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.ScanwordQuestionMapper;
 import ru.scanword.repository.QuestionRepository;
 import ru.scanword.repository.ScanwordQuestionRepository;
-import ru.scanword.repository.ScanwordRepository;
 import ru.scanword.service.ScanwordQuestionService;
 
-
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +21,7 @@ import java.util.List;
 public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
 
     private final ScanwordQuestionRepository scanwordQuestionRepository;
+    private final QuestionRepository questionRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -50,6 +51,24 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
     public ScanwordQuestionDTO create(ScanwordQuestionDTO scanwordQuestionDTO) {
         scanwordQuestionRepository.save(toEntity(scanwordQuestionDTO));
         return scanwordQuestionDTO;
+    }
+
+    @Transactional
+    @PreAuthorize("hasAuthority('create')")
+    public boolean createWithAllDTO(List<ScanwordQuestionAllDTO> scanwordQuestionDTO) {
+        List<ScanwordQuestion> scanwordQuestionList = new ArrayList<>();
+        scanwordQuestionDTO.forEach(scan -> {
+            ScanwordQuestion scanwordQuestion = new ScanwordQuestion();
+            scanwordQuestion.setScanword(scan.getScanword());
+            scanwordQuestion.setDirection(scan.getDirection());
+            scanwordQuestion.setNumber(scan.getNumber());
+            scanwordQuestion.setX(scan.getX());
+            scanwordQuestion.setY(scan.getY());
+            scanwordQuestion.setQuestion(questionRepository.getById(scan.getQuestionId()));
+            scanwordQuestionList.add(scanwordQuestion);
+        });
+        scanwordQuestionRepository.saveAll(scanwordQuestionList);
+        return true;
     }
 
     @Override
