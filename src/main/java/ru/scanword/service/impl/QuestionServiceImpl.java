@@ -16,6 +16,7 @@ import ru.scanword.repository.ImageRepository;
 import ru.scanword.repository.QuestionRepository;
 import ru.scanword.service.QuestionService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,17 +72,34 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDTO;
     }
 
-    public QuestionDTO saveWithID(QuestinOnlyIdDTO questinOnlyIdDTO) {
-        Question question = new Question();
-        question.setId(questinOnlyIdDTO.getId());
-        question.setQuestion(questinOnlyIdDTO.getQuestion());
-        question.setAnswer(questinOnlyIdDTO.getAnswer());
-        question.setType(questinOnlyIdDTO.getType());
-        question.setAudio(audioRepository.getById(questinOnlyIdDTO.getAudioId()));
-        question.setImage(imageRepository.getById(questinOnlyIdDTO.getImageId()));
-        question.setDictionary(dictionaryRepository.getById(questinOnlyIdDTO.getDictionaryId()));
-        questionRepository.save(question);
-        return toDTO(question);
+    @Transactional
+    @PreAuthorize("hasAuthority('create')")
+    public boolean saveAll(List<QuestinOnlyIdDTO> dtoList) {
+        questionRepository.saveAll(convertOnlyIdDTOToEntity(dtoList));
+        return true;
+    }
+
+
+    @Transactional
+    @PreAuthorize("hasAuthority('create')")
+    public boolean deleteAll(List<QuestinOnlyIdDTO> dtoList) {
+        questionRepository.deleteAll(convertOnlyIdDTOToEntity(dtoList));
+        return true;
+    }
+
+    private List<Question> convertOnlyIdDTOToEntity(List<QuestinOnlyIdDTO> dtoList) {
+        List<Question> questionList = new ArrayList<>();
+        for (QuestinOnlyIdDTO questinOnlyIdDTO : dtoList) {
+            Question question = new Question();
+            question.setId(questinOnlyIdDTO.getId());
+            question.setQuestion(questinOnlyIdDTO.getQuestion());
+            question.setAnswer(questinOnlyIdDTO.getAnswer());
+            question.setType(questinOnlyIdDTO.getType());
+            question.setAudio(audioRepository.getById(questinOnlyIdDTO.getAudioId()));
+            question.setImage(imageRepository.getById(questinOnlyIdDTO.getImageId()));
+            question.setDictionary(dictionaryRepository.getById(questinOnlyIdDTO.getDictionaryId()));
+        }
+        return questionList;
     }
 
     @Override

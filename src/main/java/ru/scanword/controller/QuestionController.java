@@ -26,9 +26,14 @@ public class QuestionController {
         return questionService.getAllByDictionaryId(id).stream().filter(q -> q.getId() <= 100).collect(Collectors.toList()); // hack for more quickly work with dictionary page
     }
 
-    @PostMapping("/saveWithIds")
-    public QuestionDTO saveQuestionWithIds(@RequestBody QuestinOnlyIdDTO questinOnlyIdDTO) {
-        return questionService.saveWithID(questinOnlyIdDTO);
+    @PostMapping("/saveAll")
+    public boolean saveAllWithOnlyIDS(@RequestBody List<QuestinOnlyIdDTO> questinOnlyIdDTOS) {
+        return questionService.saveAll(questinOnlyIdDTOS);
+    }
+
+    @PostMapping("/deleteAll")
+    public boolean deleteAllWithOnlyIDS(@RequestBody List<QuestinOnlyIdDTO> questinOnlyIdDTOS) {
+        return questionService.deleteAll(questinOnlyIdDTOS);
     }
 
     @GetMapping("getById/{id}")
