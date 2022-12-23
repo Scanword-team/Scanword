@@ -68,7 +68,7 @@ public class ImageServiceImpl implements ImageService {
     public boolean deleteById(Long id) {
         Optional<Image> image = imageRepository.findById(id);
         if (!image.isPresent()) {
-            throw new ResourceNotFoundException("Image with id = " + id + " not found", "");
+            return false;
         }
         imageRepository.delete(image.get());
         return true;

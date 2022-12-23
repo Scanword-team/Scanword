@@ -70,7 +70,7 @@ public class AudioServiceImpl implements AudioService {
     public boolean deleteById(Long id) {
         Optional<Audio> audio = audioRepository.findById(id);
         if (!audio.isPresent()) {
-            throw new ResourceNotFoundException("Audio with id = " + id + " not found", "");
+            return false;
         }
         audioRepository.delete(audio.get());
         return true;
