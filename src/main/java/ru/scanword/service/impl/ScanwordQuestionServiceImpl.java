@@ -64,6 +64,10 @@ public class ScanwordQuestionServiceImpl implements ScanwordQuestionService {
     @Transactional
     @PreAuthorize("hasAuthority('create')")
     public boolean createWithAllDTO(List<ScanwordQuestionAllDTO> scanwordQuestionDTO) {
+        if (!scanwordQuestionDTO.isEmpty()) {
+            List<ScanwordQuestion> sc = scanwordQuestionRepository.findAllByScanword(scanwordQuestionDTO.get(0).getScanword());
+            scanwordQuestionRepository.deleteAll(sc);
+        }
         List<ScanwordQuestion> scanwordQuestionList = new ArrayList<>();
         scanwordQuestionDTO.forEach(scan -> {
             ScanwordQuestion scanwordQuestion = new ScanwordQuestion();
