@@ -25,6 +25,11 @@ public class QuestionController {
         return questionService.getAllByDictionaryId(id);
     }
 
+    @GetMapping("getUsedByDictId/{id}")
+    public List<QuestionDTO> getAllByUsedDictionaryId(@PathVariable Long id) {
+        return questionService.getAllByUsedDictionaryId(id);
+    }
+
     @PostMapping("/saveAll")
     public boolean saveAllWithOnlyIDS(@RequestBody List<QuestinOnlyIdDTO> questinOnlyIdDTOS) {
         return questionService.saveAll(questinOnlyIdDTOS);

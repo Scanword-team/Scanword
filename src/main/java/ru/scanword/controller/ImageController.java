@@ -2,6 +2,7 @@ package ru.scanword.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.scanword.dto.AudioDTO;
 import ru.scanword.dto.ImageDTO;
 import ru.scanword.service.impl.ImageServiceImpl;
 
@@ -18,6 +19,11 @@ public class ImageController {
     @GetMapping
     public List<ImageDTO> getAll() {
         return imageService.getAll();
+    }
+
+    @GetMapping("/used")
+    public List<ImageDTO> getAllUsed() {
+        return imageService.getAllUsed();
     }
 
     @PostMapping("/create")

@@ -29,6 +29,17 @@ public class AudioServiceImpl implements AudioService {
         return allToDTO(audioRepository.findAll());
     }
 
+
+    @Transactional
+    @PreAuthorize("hasAuthority('read')")
+    public List<AudioDTO> getAllUsed() {
+        List<Audio> audioList = audioRepository.findAll();
+        audioList.removeIf(audio ->
+           !questionRepository.findAllByAudio(audio).isEmpty()
+        );
+        return allToDTO(audioList);
+    }
+
     @Override
     @Transactional
     @PreAuthorize("hasAuthority('read')")
@@ -100,4 +111,6 @@ public class AudioServiceImpl implements AudioService {
     private List<AudioDTO> allToDTO(List<Audio> audioList) {
         return AudioMapper.AUDIO_MAPPER.allToDTO(audioList);
     }
+
+
 }

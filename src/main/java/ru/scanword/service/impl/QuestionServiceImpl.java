@@ -10,10 +10,7 @@ import ru.scanword.dto.QuestinOnlyIdDTO;
 import ru.scanword.dto.QuestionDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.QuestionMapper;
-import ru.scanword.repository.AudioRepository;
-import ru.scanword.repository.DictionaryRepository;
-import ru.scanword.repository.ImageRepository;
-import ru.scanword.repository.QuestionRepository;
+import ru.scanword.repository.*;
 import ru.scanword.service.QuestionService;
 
 import java.util.ArrayList;
@@ -28,6 +25,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final DictionaryRepository dictionaryRepository;
     private final AudioRepository audioRepository;
     private final ImageRepository imageRepository;
+    private final ScanwordQuestionRepository scanwordQuestionRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -46,6 +44,24 @@ public class QuestionServiceImpl implements QuestionService {
             throw new ResourceNotFoundException("Dictionary with id = " + id + " not found", "");
         }
     }
+
+    @Transactional(readOnly = true)
+    @PreAuthorize("hasAuthority('read')")
+    public List<QuestionDTO> getAllByUsedDictionaryId(Long id) {
+        Optional<Dictionary> dictionary = dictionaryRepository.findById(id);
+        if (dictionary.isPresent()) {
+            List<Question> questionList = questionRepository.findQuestionByDictionary(dictionary.get());
+            questionList.removeIf(question ->
+                !scanwordQuestionRepository.findAllByQuestion(question).isEmpty()
+            );
+            return allToDTO(questionList);
+        } else {
+            throw new ResourceNotFoundException("Dictionary with id = " + id + " not found", "");
+        }
+    }
+
+
+
 
     @Override
     @Transactional(readOnly = true)

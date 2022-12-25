@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.scanword.domain.Audio;
 import ru.scanword.domain.Image;
+import ru.scanword.dto.AudioDTO;
 import ru.scanword.dto.ImageDTO;
 import ru.scanword.exceptions.ResourceNotFoundException;
 import ru.scanword.mapper.ImageMapper;
@@ -27,6 +29,17 @@ public class ImageServiceImpl implements ImageService {
     @PreAuthorize("hasAuthority('read')")
     public List<ImageDTO> getAll() {
         return allToDTO(imageRepository.findAll());
+    }
+
+
+    @Transactional
+    @PreAuthorize("hasAuthority('read')")
+    public List<ImageDTO> getAllUsed() {
+        List<Image> imageList = imageRepository.findAll();
+        imageList.removeIf(image ->
+                !questionRepository.findAllByImage(image).isEmpty()
+        );
+        return allToDTO(imageList);
     }
 
     @Override
@@ -101,6 +114,7 @@ public class ImageServiceImpl implements ImageService {
     private List<ImageDTO> allToDTO(List<Image> imageList) {
         return ImageMapper.IMAGE_MAPPER.allToDTO(imageList);
     }
+
 
 
 }

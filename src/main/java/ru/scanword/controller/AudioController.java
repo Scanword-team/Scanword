@@ -22,6 +22,12 @@ public class AudioController {
         return audioService.getAll();
     }
 
+    @GetMapping("/used")
+    public List<AudioDTO> getAllUsed() {
+        return audioService.getAllUsed();
+    }
+
+
     @PostMapping("/create")
     AudioDTO create(@RequestBody AudioDTO audioDTO) {
         return audioService.create(audioDTO);

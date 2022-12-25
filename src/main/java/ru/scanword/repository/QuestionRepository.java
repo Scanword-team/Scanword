@@ -15,4 +15,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findQuestionByImage(Image image);
     List<Question> findQuestionByAudio(Audio audio);
     List<Question> findQuestionByDictionary(Dictionary dictionary);
+
+    List<Question> findAllByAudio(Audio audio);
+    List<Question> findAllByImage(Image image);
 }
