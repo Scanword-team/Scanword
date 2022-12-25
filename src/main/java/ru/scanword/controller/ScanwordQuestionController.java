@@ -34,7 +34,7 @@ public class ScanwordQuestionController {
         return scanwordQuestionService.getAllByScanwordId(scanword_id);
     }
 
-    @PostMapping("getAllByScanword/")
+    @PostMapping("/getAllByScanword")
     public List<ScanwordQuestionDTO> getAllByScanwordId(@RequestBody ScanwordDTO scanwordDTO) {
         return scanwordQuestionService.getAllByScanword(scanwordDTO);
     }

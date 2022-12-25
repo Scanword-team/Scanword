@@ -123,10 +123,13 @@ public class SolvableScanwordServiceImpl implements SolvableScawordService {
     @Transactional
     @PreAuthorize("hasAuthority('read')")
     public SolvableScanwordDTO decreasePromptById(Long id) {
-        SolvableScanwordDTO solvableScanwordDTO = toDTO(solvableScanwordRepository.getById(id));
-        solvableScanwordDTO.setPrompt(solvableScanwordDTO.getPrompt() - 1);
-        solvableScanwordRepository.save(toEntity(solvableScanwordDTO));
-        return solvableScanwordDTO;
+        UserDetails securityUser = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findByName(securityUser.getUsername()).get();
+
+        SolvableScanword solvableScanword =  solvableScanwordRepository.findByScanwordIdAndOwner(id, user).get();
+        solvableScanword.setPrompt(solvableScanword.getPrompt() - 1);
+        solvableScanwordRepository.save(solvableScanword);
+        return toDTO(solvableScanword);
     }
 
     @Override
